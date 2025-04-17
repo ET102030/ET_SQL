@@ -1,0 +1,16 @@
+/*
+Here is a SQL query to identify the top 10 movies that brought in the most sales revenue
+Key concepts used:
+- Joins between 4 tables
+- Group by
+- Order by
+*/
+
+select d.film_id, d.title, d.rating, sum(a.amount) as sum_revenue
+from payment A
+JOIN rental B on A.rental_id=B.rental_id
+JOIN inventory C on B.inventory_id=C.inventory_id
+JOIN film D on C.film_id=D.film_id
+Group by d.film_id
+Order by sum_revenue desc
+limit 10
