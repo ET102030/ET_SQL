@@ -1,0 +1,25 @@
+/* 
+Here is a SQL query using subqueries, CTE, and aggregate function.
+The CTE was used to identify a table of all sales transations 
+The main query was then used to identify any repeat customers
+These customers were identified in order to understand spending habits, and affect marketing strategies going forward in order to drive increased sales
+/*
+
+
+WITH repeat_customers AS (select H.country, a.customer_id, C.first_name, C.last_Name, count(A.payment_id) count_of_purchases, sum(A.amount) sum_paid_over_time 
+from payment A
+JOIN rental B on A.rental_id=B.rental_id
+JOIN customer C on B.customer_id=C.customer_id
+JOIN inventory D on B.inventory_id=D.inventory_id
+JOIN film E on D.film_id=E.film_id
+JOIN address F ON C.address_id = F.address_id
+JOIN city G ON F.city_id = G.city_id
+JOIN country H ON G.country_ID = H.country_ID
+
+Group by A.customer_id, C.first_name, C.last_Name, H.country
+order by count_of_purchases DESC)
+
+select country, count(distinct customer_id) as count_of_repeat_customers
+From repeat_customers
+Group by country
+order by count_of_repeat_customers DESC
